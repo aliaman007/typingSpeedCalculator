@@ -1,0 +1,29 @@
+# prompt: Create a html page to calculate typing speed with simple UI, put the text to type as a separate display text make typing box and sample text seperate
+
+%%html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Typing Speed Calculator</title>
+</head>
+<body>
+  <h1>Typing Speed Calculator</h1>
+  <p><b>Sample Text:</b> <span id="sample-text">The quick brown fox jumps over the lazy dog.</span></p>
+  <textarea id="typing-box" rows="5" cols="50"></textarea><br>
+  <button onclick="calculateSpeed()">Calculate Speed</button>
+  <p id="result"></p>
+
+  <script>
+    function calculateSpeed() {
+      var sampleText = document.getElementById("sample-text").textContent;
+      var typedText = document.getElementById("typing-box").value;
+      var startTime = new Date().getTime();
+      var endTime = new Date().getTime();
+      var timeTaken = (endTime - startTime) / 1000;
+      var wordsTyped = typedText.split(" ").length;
+      var wpm = wordsTyped / (timeTaken / 60);
+      document.getElementById("result").innerHTML = "Your typing speed is: " + wpm.toFixed(2) + " WPM";
+    }
+  </script>
+</body>
+</html>
