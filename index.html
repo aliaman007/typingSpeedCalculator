@@ -1,6 +1,3 @@
-# prompt: Create a html page to calculate typing speed with simple UI, put the text to type as a separate display text make typing box and sample text seperate
-
-%%html
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,19 +6,39 @@
 <body>
   <h1>Typing Speed Calculator</h1>
   <p><b>Sample Text:</b> <span id="sample-text">The quick brown fox jumps over the lazy dog.</span></p>
-  <textarea id="typing-box" rows="5" cols="50"></textarea><br>
+  <textarea id="typing-box" rows="5" cols="50" oninput="startTyping()"></textarea><br>
   <button onclick="calculateSpeed()">Calculate Speed</button>
   <p id="result"></p>
 
   <script>
+    var startTime = null;
+
+    function startTyping() {
+      if (startTime === null) {  // Only set the start time once when the user types the first character
+        startTime = new Date().getTime();
+      }
+    }
+
     function calculateSpeed() {
-      var sampleText = document.getElementById("sample-text").textContent;
       var typedText = document.getElementById("typing-box").value;
-      var startTime = new Date().getTime();
+      
+      // Check if the user has typed anything
+      if (typedText.trim().length === 0) {
+        document.getElementById("result").innerHTML = "Please type the text.";
+        return;
+      }
+
       var endTime = new Date().getTime();
-      var timeTaken = (endTime - startTime) / 1000;
-      var wordsTyped = typedText.split(" ").length;
-      var wpm = wordsTyped / (timeTaken / 60);
+      var timeTaken = (endTime - startTime) / 1000;  // Time taken in seconds
+      
+      if (timeTaken === 0) {
+        document.getElementById("result").innerHTML = "Typing time is too short to calculate.";
+        return;
+      }
+
+      var wordsTyped = typedText.split(" ").filter(word => word.trim() !== "").length;  // Count words
+      var wpm = wordsTyped / (timeTaken / 60);  // Words per minute
+      
       document.getElementById("result").innerHTML = "Your typing speed is: " + wpm.toFixed(2) + " WPM";
     }
   </script>
